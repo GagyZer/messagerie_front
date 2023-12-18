@@ -22,8 +22,8 @@
           <template v-for="conversation in conversations" :key="conversation._id">
             <div @click="navigateToConversation(conversation._id)" class="cursor-pointer hover:bg-gray-200 p-2 rounded">
               {{ conversation.title || 'Conversation sans titre' }}
-
             </div>
+            <button @click="deleteConversation(conversation._id)" class="ml-2 text-red-500">Delete</button>
           </template>
         </div>
       </div>
@@ -110,6 +110,24 @@ const fetchConversations = async () => {
   }
 };
 
+const deleteConversation = async (convId: string) => {
+  try {
+    const token = localStorage.getItem('jwt');
+    const response = await axios.delete(`http://localhost:5000/conversations/${convId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    // Filtrer les conversations après la suppression de celle avec l'ID spécifié
+    conversations.value = conversations.value.filter(conversation => conversation._id !== convId);
+
+    console.log('Conversation supprimée:', response.data.conversation);
+  } catch (error) {
+    console.error('Erreur lors de la suppression de la conversation', error);
+  }
+};
+
 onMounted(async () => {
   await fetchUsers();
   await fetchConversations();
@@ -121,9 +139,18 @@ onMounted(async () => {
 const createConversation = async () => {
   try {
     const token = localStorage.getItem('jwt');
-    console.log('Requête de création de conversation :', {
-      concernedUsersIds: selectedUsersIds.value.map(user => user._id),
-    });
+    const participantsIds = selectedUsersIds.value.map(user => user._id);
+
+    const existingConversation = conversations.value.find(conversation =>
+        conversation.participants.every(participantId => participantsIds.includes(participantId))
+    );
+
+    if (existingConversation) {
+      // Rediriger vers la conversation existante
+      router.push(`/conversation/${existingConversation._id}`);
+      return;
+    }
+
     const response = await axios.post('http://localhost:5000/conversations', {
       concernedUsersIds: selectedUsersIds.value.map(user => user._id),
     }, {
