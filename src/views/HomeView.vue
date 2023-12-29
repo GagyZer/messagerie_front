@@ -74,6 +74,7 @@ import { useRouter } from 'vue-router'
 import { twMerge } from 'tailwind-merge'
 import type {User} from "@/models/user";
 import type {Conversation} from "@/models/conversation";
+import UserCard from '@/components/UserCard.vue';
 import axios from "axios";
 
 const router = useRouter()

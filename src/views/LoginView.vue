@@ -23,15 +23,16 @@
               name="password"
               class="w-full border rounded py-2 px-3"
               required
+              @input="handlePasswordInput"
           />
           <!-- Validation visuelle du mot de passe -->
           <div v-if="!isPasswordValid" class="text-red-500 mt-2">
             Mot de passe invalide : il doit avoir entre 5 et 15 caractères.
           </div>
           <!-- Message d'erreur si le mot de passe ne correspond pas -->
-          <div v-if="loginError" class="text-red-500 mt-2">
-            Nom d'utilisateur ou mot de passe incorrect.
-          </div>
+<!--          <div v-if="loginError" class="text-red-500 mt-2">-->
+<!--            Nom d'utilisateur ou mot de passe incorrect.-->
+<!--          </div>-->
         </div>
         <div class="text-center">
           <button
@@ -72,7 +73,6 @@ const submitForm = async () => {
     });
 
     if (response.data.token) {
-      console.log(response.data.token);
       localStorage.setItem('jwt', response.data.token);
       sessionStorage.setItem('user', JSON.stringify(response.data.user));
       router.push('/home');
@@ -92,4 +92,13 @@ const validatePassword = () => {
   isPasswordValid.value = isValid;
   return isValid;
 };
+
+const handlePasswordInput = () => {
+  // Mettez à jour le message d'erreur du login si le mot de passe ne correspond pas
+  loginError.value = false; // Réinitialisez le message d'erreur à chaque saisie
+  if (!validatePassword()) {
+    loginError.value = true;
+  }
+};
+
 </script>

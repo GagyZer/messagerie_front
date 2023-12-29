@@ -1,6 +1,7 @@
   import { createRouter, createWebHistory } from 'vue-router'
   import HomeView from '@/views/HomeView.vue'
-  import LoginView from '@/views/LoginView.vue' // Ajoutez cette ligne pour importer LoginView
+  import LoginView from '@/views/LoginView.vue'
+  import ConversationView from "@/views/ConversationView.vue"; // Ajoutez cette ligne pour importer LoginView
 
 
   const router = createRouter({
@@ -15,6 +16,12 @@
         path: '/', // Ajoutez cette nouvelle route
         name: 'login',
         component: LoginView
+      },
+      {
+        path: '/conversation/:conversationId', // Ajoutez une route dynamique
+        name: 'conversation',
+        component: ConversationView, // Importez la vue de la conversation
+        props: true // Permet de passer l'ID de la conversation comme propriété à la vue
       }
     ]
   })

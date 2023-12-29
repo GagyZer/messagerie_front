@@ -16,8 +16,11 @@
   "dependencies": {
     "@heroicons/vue": "^2.0.18",
     "axios": "^1.5.1",
+    "components": "^0.1.0",
     "cors": "^2.8.5",
+    "module-name": "^0.0.1-security",
     "pinia": "^2.1.6",
+    "pnpm": "^8.12.1",
     "socket.io-client": "^4.7.2",
     "tailwind-merge": "^1.14.0",
     "uuid": "^9.0.1",
